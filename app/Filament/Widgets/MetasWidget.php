@@ -8,6 +8,9 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Meta;
+use Filament\Support\Enums\Alignment;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -36,18 +39,25 @@ class MetasWidget extends TableWidget
 
         return $table
             ->query(fn(): Builder => $query)
+            ->paginated(false)
             ->columns([
-                TextColumn::make('category.title')
-                    ->label('Categoria'),
-                TextColumn::make('value')
-                    ->label('Meta')
-                    ->badge()
-                    ->formatStateUsing(function ($state, $record) {
-                        return FormatCurrency::getFormatCurrency($state) . ' / ' . (FormatCurrency::getFormatCurrency($record->category->total_expenses ?? 0));
-                    }),
-                TextColumn::make('date')
-                    ->label('Data')
-                    ->dateTime('m/y'),
+                Split::make([
+                    TextColumn::make('category.title')
+                        ->label('Categoria'),
+                    TextColumn::make('value')
+                        ->label('Meta')
+                        ->badge()
+                        ->formatStateUsing(function ($state, $record) {
+                            return (FormatCurrency::getFormatCurrency($record->category->total_expenses ?? 0) . ' / ' . FormatCurrency::getFormatCurrency($state));
+                        }),
+                    TextColumn::make('date')
+                        ->label('Data')
+                        ->dateTime('m/y'),
+                ])
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 //

@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ImmediateExpenseResource extends Resource
 {
@@ -22,7 +23,13 @@ class ImmediateExpenseResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $label = 'Despesa Imediata';
+
+    protected static ?string $pluralLabel = 'Despesas Imediatas';
+
     protected static ?string $recordTitleAttribute = 'ImmediateExpense';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Depósitos e Despesas';
 
     public static function form(Schema $schema): Schema
     {

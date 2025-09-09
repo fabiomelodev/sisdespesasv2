@@ -5,6 +5,8 @@ namespace App\Filament\Widgets;
 use App\Helpers\FormatCurrency;
 use App\Models\Category;
 use Filament\Actions\BulkActionGroup;
+use Filament\Tables\Columns\Layout\Grid;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -42,12 +44,19 @@ class TotalExpensesByCategoriesWidget extends TableWidget
             ->query(fn(): Builder => $query)
             ->heading('Categorias')
             ->description('Total: ' . ($valueTotal))
+            ->paginated(false)
             ->columns([
-                TextColumn::make('title')
-                    ->label('Título'),
-                TextColumn::make('totalExpenses')
-                    ->label('Total')
-                    ->formatStateUsing(fn($state) => FormatCurrency::getFormatCurrency($state))
+                Stack::make([
+                    TextColumn::make('title')
+                        ->label('Título'),
+                    TextColumn::make('totalExpenses')
+                        ->label('Total')
+                        ->formatStateUsing(fn($state) => FormatCurrency::getFormatCurrency($state))
+                ])
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 //

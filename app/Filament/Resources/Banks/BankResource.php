@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class BankResource extends Resource
 {
@@ -25,6 +26,8 @@ class BankResource extends Resource
     protected static ?string $label = 'Banco';
 
     protected static ?string $recordTitleAttribute = 'Bank';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema
     {

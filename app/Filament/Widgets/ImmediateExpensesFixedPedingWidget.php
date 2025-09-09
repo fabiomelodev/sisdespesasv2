@@ -8,6 +8,11 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ImmediateExpense;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -36,6 +41,7 @@ class ImmediateExpensesFixedPedingWidget extends TableWidget
             ->query(fn(): Builder => $query)
             ->heading('Pendentes')
             ->description('Total: ' . ($valueTotal))
+            ->paginated(false)
             ->columns([
                 TextColumn::make('title')
                     ->label('Título'),
@@ -55,7 +61,35 @@ class ImmediateExpensesFixedPedingWidget extends TableWidget
                 //
             ])
             ->recordActions([
-                //
+                EditAction::make()
+                    ->schema([
+                        TextInput::make('title')
+                            ->label('Título')
+                            ->required(),
+                        Select::make('bank_id')
+                            ->relationship('bank', 'title')
+                            ->label('Banco')
+                            ->required(),
+                        DatePicker::make('due_date')
+                            ->label('Vencimento')
+                            ->displayFormat('d/m/y')
+                            ->required(),
+                        DatePicker::make('pay_day')
+                            ->label('Data de pagamento')
+                            ->displayFormat('d/m/y')
+                            ->required(),
+                        TextInput::make('value')
+                            ->label('Valor')
+                            ->required(),
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'pendente' => 'Pendente',
+                                'pago'     => 'Pago',
+                            ])
+                            ->required()
+                            ->columnSpan('full')
+                    ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

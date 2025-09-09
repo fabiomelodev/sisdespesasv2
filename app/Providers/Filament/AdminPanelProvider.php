@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Pages\Dashboard;
+use Filament\Navigation\NavigationGroup;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -56,6 +57,24 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->viteTheme('resources/css/filament/admin/theme.css');
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label(fn(): string => __('Geral'))
+                    ->icon('heroicon-m-chart-pie')
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(fn(): string => __('Depósitos e Despesas'))
+                    ->icon('heroicon-s-currency-dollar')
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(fn(): string => __('Créditos'))
+                    ->icon('heroicon-s-credit-card')
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(fn(): string => __('Configurações'))
+                    ->icon('heroicon-s-cog-8-tooth')
+                    ->collapsed(),
+            ]);
     }
 }

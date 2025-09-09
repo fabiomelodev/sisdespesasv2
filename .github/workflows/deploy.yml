@@ -1,0 +1,54 @@
+name: Deploy Laravel para Hostinger
+
+on:
+  push:
+    branches:
+      - main     # Produção
+      - develop  # Staging
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar PHP (apenas para testes de build antes do deploy)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, bcmath, intl, sqlite, mysql
+
+      - name: Instalar dependências do Composer
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Build assets (se usar Vite/NPM)
+        run: |
+          npm install
+          npm run build
+
+      - name: Definir diretório remoto de destino
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "dir=/production/" >> $GITHUB_OUTPUT
+          else
+            echo "dir=/staging/" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ steps.vars.outputs.dir }}
+          protocol: ftps
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/vendor/**
+            **/tests/**
+            **/.env

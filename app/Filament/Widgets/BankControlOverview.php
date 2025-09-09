@@ -14,8 +14,6 @@ class BankControlOverview extends Widget
 
     protected string $view = 'filament.widgets.bank-control-overview';
 
-    // public $banks;
-
     public function getViewData(): array
     {
         $startDate = $this->pageFilters['startDate'] ?? null;

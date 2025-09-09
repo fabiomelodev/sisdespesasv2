@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DepositResource extends Resource
 {
@@ -22,7 +23,13 @@ class DepositResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $label = 'Depósito';
+
+    protected static ?string $pluralLabel = 'Depósitos';
+
     protected static ?string $recordTitleAttribute = 'Deposit';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Depósitos e Despesas';
 
     public static function form(Schema $schema): Schema
     {
