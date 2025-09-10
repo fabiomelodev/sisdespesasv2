@@ -31,9 +31,9 @@ class ImmediateExpensesFixedPaidWidget extends TableWidget
         $query = ImmediateExpense::query()
             ->where('type', 'fixo')
             ->where('status', 'pago')
-            ->when($startDate, fn($query) => $query->whereDate('due_date', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->whereDate('due_date', '<=', $endDate))
-            ->orderBy('due_date', 'desc');
+            ->when($startDate, fn($query) => $query->whereDate('pay_day', '>=', $startDate))
+            ->when($endDate, fn($query) => $query->whereDate('pay_day', '<=', $endDate))
+            ->orderBy('pay_day', 'desc');
 
         $valueTotal = FormatCurrency::getFormatCurrency($query->sum('value'));
 
